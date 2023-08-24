@@ -1,7 +1,8 @@
 import Model.Epic;
 import Model.Subtask;
 import Model.Task;
-import Service.Manager;
+
+import Service.TaskManager;
 
 import java.util.HashMap;
 
@@ -9,41 +10,33 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Manager manager = new Manager();
+        TaskManager manager = new TaskManager();
 
         // Тест
 
-        Task task = new Task("Сделать домашку", "Иначе пока-пока моим деньгам",
+        Task task = new Task("Иначе пока-пока моим деньгам",
                 "NEW"); // 1
-        Task task1 = new Task("Покормить кота", "немного, а то он жирный",
+        Task task1 = new Task("немного, а то он жирный",
                 "NEW"); // 2
         Epic epic = new Epic("Переезд", "Нужно переехать в новую квартиру"); // 3
-        Subtask subtask = new Subtask("Собрать вещи", "Вещи жены оставить, так как развожусь",
-                "NEW", 3); // 4
-        Subtask subtask1 = new Subtask("Вызвать Грузовик", "Узнать у кореша телефон",
-                "NEW", 3); // 5
+        Subtask subtask = new Subtask("Собрать вещи", "Вещи жены оставить, так как развожусь", 3); // 4
+        Subtask subtask1 = new Subtask("Вызвать Грузовик", "Узнать у кореша телефон", 3); // 5
         Epic epic1 = new Epic("Отремонтировать шкаф", "Сломал когда ссорился с женой");
-        Subtask subtask2 = new Subtask("Купить запчасти", "В Леруа Мерлен",
-                "NEW", 6); // 7
-        Task newStatTask = new Task("Сделать домашку", "Иначе пока-пока моим деньгам", 1,
-                "IN_PROGRESS"); // 1
-        Subtask newStatSubtask = new Subtask("Купить запчасти", "В Леруа Мерлен", 7,
-                "DONE", 6); // 7
+        Subtask subtask2 = new Subtask("Купить запчасти", "В Леруа Мерлен", 6); // 7
+        Task newStatTask = new Task("Сделать домашку", "Иначе пока-пока моим деньгам"); // 1
+        Subtask newStatSubtask = new Subtask("Купить запчасти", "В Леруа Мерлен", 6); // 7
         Subtask newStatSubtask1 = new Subtask("Собрать вещи",
-                "Вещи жены оставить, так как развожусь", 4,
-                "DONE", 3); // 4
-        Subtask newStatSubtask2 = new Subtask("Вызвать Грузовик", "Узнать у кореша телефон",
-                5,
-                "NEW", 3); // 5
+                "Вещи жены оставить, так как развожусь",3); // 4
+        Subtask newStatSubtask2 = new Subtask("Вызвать Грузовик", "Узнать у кореша телефон", 3); // 5
 
 
-        manager.saveTask(task);
-        manager.saveTask(task1);
-        manager.saveEpic(epic);
-        manager.saveSubtask(subtask);
-        manager.saveSubtask(subtask1);
-        manager.saveEpic(epic1);
-        manager.saveSubtask(subtask2);
+        manager.createTask(task);
+        manager.createTask(task1);
+        manager.createEpic(epic);
+        manager.createSubtask(subtask);
+        manager.createSubtask(subtask1);
+        manager.createEpic(epic1);
+        manager.createSubtask(subtask2);
 
         HashMap<Integer, Task> taskCheckSave = manager.getTaskMap(task);
         HashMap<Integer, Epic> epicCheckSave = manager.getEpicMap(epic);
@@ -69,7 +62,7 @@ public class Main {
 
         manager.updateSubtask(newStatSubtask1);
         manager.updateSubtask(newStatSubtask2);
-        System.out.println(epic.getStatusEpic());
+        System.out.println(epic.getStatusTask());
         System.out.println();
 
         // Удаление

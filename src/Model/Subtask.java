@@ -4,19 +4,9 @@ public class Subtask extends Task {
 
     private Integer idEpic;
 
-    public Subtask(String taskName, String taskDescription, String statusSubtask, Integer idEpic) {
-        super(taskName, taskDescription, statusSubtask);
+    public Subtask(String taskName, String taskDescription, Integer idEpic) {
+        super(taskName, taskDescription);
         this.idEpic = idEpic;
-    }
-
-    public Subtask(String taskName, String taskDescription, Integer id, String statusTask, Integer idEpic) {
-        super(taskName, taskDescription, id, statusTask);
-        this.idEpic = idEpic;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @Override

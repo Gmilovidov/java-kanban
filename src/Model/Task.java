@@ -1,28 +1,22 @@
 package Model;
 
 public class Task {
+    private static int id = 0;
     protected String taskName;
     protected String taskDescription;
-    protected Integer id;
     protected String statusTask;
 
-    public Task(String taskName, String taskDescription, String statusTask) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.statusTask = statusTask;
-    }
-
-    public Task(String taskName, String taskDescription, Integer id, String statusTask) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.id = id;
-        this.statusTask = statusTask;
-    }
-
     public Task(String taskName, String taskDescription) {
+        this.id = generateId();
         this.taskName = taskName;
         this.taskDescription = taskDescription;
+        this.statusTask = "NEW";
     }
+
+    private Integer generateId() {
+        return ++id;
+    }
+
 
 
     public void setId(Integer id) {
@@ -46,9 +40,9 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "taskName='" + taskName + '\'' +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                ", id=" + id +
                 ", statusTask='" + statusTask + '\'' +
                 '}';
     }

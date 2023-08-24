@@ -4,19 +4,10 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
 
-    private String statusEpic;
     private ArrayList<Integer> idSubtask = new ArrayList<>();
-
-
 
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription);
-    }
-
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @Override
@@ -32,22 +23,14 @@ public class Epic extends Task {
         return idSubtask;
     }
 
-    public void setStatusEpic(String statusEpic) {
-        this.statusEpic = statusEpic;
-    }
-
-    public String getStatusEpic() {
-        return statusEpic;
-    }
 
     @Override
     public String toString() {
         return "Epic{" +
-                "statusEpic='" + statusEpic + '\'' +
+                "statusTask='" + statusTask+ '\'' +
                 ", idSubtask=" + idSubtask +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                ", id=" + id +
                 '}';
     }
 

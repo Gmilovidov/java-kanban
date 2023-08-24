@@ -8,35 +8,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Manager {
+public class TaskManager {
 
-    protected String status = "NEW";
-    protected Integer id = 0;
+
     protected HashMap<Integer, Task> dataTask = new HashMap<>();
     protected HashMap<Integer, Epic> dataEpic = new HashMap<>();
     protected HashMap<Integer, Subtask> dataSubtask = new HashMap<>();
 
     // 2.4 Создание задач
 
-    public void saveTask(@NotNull Task task) {
-        id++;
-        task.setId(id);
-        dataTask.put(id, task);
+    public void createTask(@NotNull Task task) {
+        dataTask.put(task.getId(), task);
     }
 
-    public void saveEpic(@NotNull Epic epic) {
-        id++;
-        epic.setId(id);
-        epic.setStatusEpic(status);
-        dataEpic.put(id, epic);
+    public void createEpic(@NotNull Epic epic) {
+        dataEpic.put(epic.getId(), epic);
     }
 
-    public void saveSubtask(@NotNull Subtask subtask) {
-        id++;
-        subtask.setId(id);
+    public void createSubtask(@NotNull Subtask subtask) {
         int idMentor = subtask.getIdEpic();
         dataEpic.get(idMentor).addSubtask(subtask.getId());
-        dataSubtask.put(id, subtask);
+        dataSubtask.put(subtask.getId(), subtask);
     }
 
     // 2.1 Получение задач
@@ -151,23 +143,23 @@ public class Manager {
         Epic curEpic = dataEpic.get(idEpic);// получили эпик к которому относится сабтаск
         ArrayList<Integer> idSubtask = curEpic.getIdSubtask();
         if (idSubtask.isEmpty()) {
-            curEpic.setStatusEpic("NEW");
+            curEpic.setStatusTask("NEW");
             return;
         }
         if (!dataSubtask.isEmpty()) {
             Subtask sub1 = dataSubtask.get(idSubtask.get(0));
             String stat = sub1.getStatusTask();
             if (stat.equals("IN_PROGRESS")) {
-                curEpic.setStatusEpic("IN_PROGRESS");
+                curEpic.setStatusTask("IN_PROGRESS");
                 return;
             }
             for (Integer idSub : idSubtask) {
                 Subtask sub = dataSubtask.get(idSub);
                 if (!sub.getStatusTask().equals(stat)) {
-                    curEpic.setStatusEpic("IN_PROGRESS");
+                    curEpic.setStatusTask("IN_PROGRESS");
                 }
             }
-            curEpic.setStatusEpic(stat);
+            curEpic.setStatusTask(stat);
         }
     }
 }
