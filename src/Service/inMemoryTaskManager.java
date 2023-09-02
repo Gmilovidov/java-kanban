@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryTaskManager implements TaskManager {
+public class inMemoryTaskManager implements TaskManager {
 
     private final Map<Integer, Task> dataTask;
     private final Map<Integer, Epic> dataEpic;
     private final Map<Integer, Subtask> dataSubtask;
     private final HistoryManager historyManager;
 
-    public InMemoryTaskManager() {
+    public inMemoryTaskManager() {
         dataTask = new HashMap<>();
         dataEpic = new HashMap<>();
         dataSubtask = new HashMap<>();
@@ -181,7 +181,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (Integer idSub : idSubtask) {
                 Subtask sub = dataSubtask.get(idSub);
                 if (!sub.getStatusTask().equals(stat)) {
-                    curEpic.setStatusTask(StatusTasks.IN_PROGRESS);
+                    curEpic.setStatusTask(StatusTasks.DONE);
                 }
             }
             curEpic.setStatusTask(stat);

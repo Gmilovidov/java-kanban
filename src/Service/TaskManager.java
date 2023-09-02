@@ -19,7 +19,6 @@ public interface TaskManager {
 
     void createSubtask(@NotNull Subtask subtask);
 
-
     // 2.1 Получение задач
 
     Map<Integer, Task> getTaskMap(Task task);
@@ -33,7 +32,6 @@ public interface TaskManager {
     void removeTask();
 
     void removeEpic();
-
 
     void removeSubtask();
 
@@ -52,6 +50,7 @@ public interface TaskManager {
     void updateEpic(@NotNull Epic epic);
 
     void updateSubtask(@NotNull Subtask subtask);
+
     // 2.6 Удаление по id
 
     void removeTaskById(Integer id);
