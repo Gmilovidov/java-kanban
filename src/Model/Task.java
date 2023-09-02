@@ -1,20 +1,21 @@
 package Model;
 
 public class Task {
-    private static int id = 0;
+    private static int count = 0;
+    protected int id = 0;
     protected String taskName;
     protected String taskDescription;
-    protected String statusTask;
+    protected StatusTasks statusTask;
 
     public Task(String taskName, String taskDescription) {
         this.id = generateId();
         this.taskName = taskName;
         this.taskDescription = taskDescription;
-        this.statusTask = "NEW";
+        this.statusTask = StatusTasks.NEW;
     }
 
     private Integer generateId() {
-        return ++id;
+        return ++count;
     }
 
 
@@ -23,16 +24,15 @@ public class Task {
         this.id = id;
     }
 
-
     public Integer getId() {
         return id;
     }
 
-    public String getStatusTask() {
+    public StatusTasks getStatusTask() {
         return statusTask;
     }
 
-    public void setStatusTask(String statusTask) {
+    public void setStatusTask(StatusTasks statusTask) {
         this.statusTask = statusTask;
     }
 
@@ -40,10 +40,10 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "id=" + id +
+                "id='" + id + '\'' +
+                ", statusTask='" + statusTask + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                ", statusTask='" + statusTask + '\'' +
                 '}';
     }
 
