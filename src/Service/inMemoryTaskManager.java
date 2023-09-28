@@ -83,7 +83,6 @@ public class inMemoryTaskManager implements TaskManager {
             ep.setIdSubtask(idSubtask);
             calculateStatEpic(id);
         }
-
     }
 
     // 2.3 Получение по id
@@ -95,7 +94,9 @@ public class inMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicById(Integer id) {
-        historyManager.add(dataEpic.get(id));
+        if (dataEpic.containsKey(id)) {
+            historyManager.add(dataEpic.get(id));
+        }
         return dataEpic.get(id);
     }
 
@@ -131,6 +132,7 @@ public class inMemoryTaskManager implements TaskManager {
     // 2.6 Удаление по id
     @Override
     public void removeTaskById(Integer id) {
+        historyManager.remove(id);
         dataTask.remove(id);
     }
     @Override
@@ -139,8 +141,10 @@ public class inMemoryTaskManager implements TaskManager {
         ArrayList<Integer> curSubId =  epic.getIdSubtask();
         for(Integer idSub : curSubId) {
             dataSubtask.get(idSub).setIdEpic(null);
+            historyManager.remove(idSub);
         }
         dataEpic.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -150,6 +154,7 @@ public class inMemoryTaskManager implements TaskManager {
         ArrayList<Integer> subList =  curEpic.getIdSubtask();
         subList.remove(id);
         dataSubtask.remove(id);
+        historyManager.remove(id);
         calculateStatEpic(EpId);
     }
 
