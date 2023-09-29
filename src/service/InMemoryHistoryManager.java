@@ -1,19 +1,18 @@
-package Service;
+package service;
 
-import Model.Task;
+import model.Task;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-
     protected Map<Integer, Node> dataNode = new HashMap<>();
     protected CustomLinkedList customLinkedMap = new CustomLinkedList();
     protected Node head;
     protected Node tail;
 
-    public void removeNode(Node node) {
+    public void removeNode(@NotNull Node node) {
             if (node.prev != null) {
                 node.prev.next = node.next;
                 if (node.next == null) {
@@ -33,6 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(@NotNull Task task) {
+
         if (this.dataNode != null) {
             int id = task.getId();
             remove(id);
@@ -61,7 +61,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         ArrayList<Task> tasks = new ArrayList<>();
         Node node = head;
         while (node != null) {
-            tasks.add(node.task);
+            tasks.add(0, node.task);
             node = node.next;
         }
         return tasks;
@@ -69,6 +69,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     public class CustomLinkedList {
+
         public void linkLast(Task task) {
             Node node = new Node(head, task, null);
             if (head == null) {

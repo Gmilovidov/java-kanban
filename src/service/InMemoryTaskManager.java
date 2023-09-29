@@ -1,9 +1,9 @@
-package Service;
+package service;
 
-import Model.Epic;
-import Model.StatusTasks;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.StatusTasks;
+import model.Subtask;
+import model.Task;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class inMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
 
     private final Map<Integer, Task> dataTask;
     private final Map<Integer, Epic> dataEpic;
     private final Map<Integer, Subtask> dataSubtask;
     private final HistoryManager historyManager;
 
-    public inMemoryTaskManager() {
+    public InMemoryTaskManager() {
         dataTask = new HashMap<>();
         dataEpic = new HashMap<>();
         dataSubtask = new HashMap<>();

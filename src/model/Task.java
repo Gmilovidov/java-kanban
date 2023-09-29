@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class Task {
     private static int count = 0;

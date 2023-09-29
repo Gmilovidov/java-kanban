@@ -1,16 +1,16 @@
-import Model.Epic;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Task;
 
-import Service.inMemoryTaskManager;
+import service.InMemoryTaskManager;
 
-import Service.TaskManager;
+import service.TaskManager;
 
 public class Main {
 
     public static void main(String[] args) {
 
-          TaskManager taskManager = new inMemoryTaskManager();
+          TaskManager taskManager = new InMemoryTaskManager();
 
         // Тест
         Task task = new Task("Закончить учебу", "Иначе пока-пока моим деньгам"); // 1
@@ -44,17 +44,17 @@ public class Main {
         System.out.println("Размер списка истории просмотра до удаления - " + taskManager.getHistory().size());
         System.out.println();
 
-        taskManager.removeTaskById(1);
-        taskManager.removeEpicById(3);
-        taskManager.removeEpicById(7);
+//        taskManager.removeTaskById(1);
+//        taskManager.removeEpicById(3);
+//        taskManager.removeEpicById(7);
+//
+//        System.out.println(taskManager.getHistory());
+//        System.out.println();
+//
+//        System.out.println("Размер списка истории просмотра после удаления - " + taskManager.getHistory().size());
+//        System.out.println();
 
-        System.out.println(taskManager.getHistory());
-        System.out.println();
-
-        System.out.println("Размер списка истории просмотра после удаления - " + taskManager.getHistory().size());
-        System.out.println();
-
-        System.out.println(taskManager.getTaskMap(task));
+//        System.out.println(taskManager.getTaskMap(task));
         
     }
 }

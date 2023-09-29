@@ -1,8 +1,8 @@
-package Service;
+package service;
 
-import Model.Epic;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Task;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
