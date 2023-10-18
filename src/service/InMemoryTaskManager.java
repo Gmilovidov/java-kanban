@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final Map<Integer, Task> dataTask;
-    private final Map<Integer, Epic> dataEpic;
-    private final Map<Integer, Subtask> dataSubtask;
-    private final HistoryManager historyManager;
+    protected final Map<Integer, Task> dataTask;
+    protected final Map<Integer, Epic> dataEpic;
+    protected final Map<Integer, Subtask> dataSubtask;
+    protected final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         dataTask = new HashMap<>();
@@ -45,17 +45,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     // 2.1 Получение задач
     @Override
-    public Map<Integer, Task> getTaskMap(Task task) {
+    public Map<Integer, Task> getTaskMap() {
         return dataTask;
     }
 
     @Override
-    public Map<Integer, Epic> getEpicMap(Epic epic) {
+    public Map<Integer, Epic> getEpicMap() {
         return dataEpic;
     }
 
     @Override
-    public Map<Integer, Subtask> getSubtaskMap(Subtask subtask) {
+    public Map<Integer, Subtask> getSubtaskMap() {
         return dataSubtask;
     }
 

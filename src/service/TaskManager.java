@@ -21,11 +21,11 @@ public interface TaskManager {
 
     // 2.1 Получение задач
 
-    Map<Integer, Task> getTaskMap(Task task);
+    Map<Integer, Task> getTaskMap();
 
-    Map<Integer, Epic> getEpicMap(Epic epic);
+    Map<Integer, Epic> getEpicMap();
 
-    Map<Integer, Subtask> getSubtaskMap(Subtask subtask);
+    Map<Integer, Subtask> getSubtaskMap();
 
     // 2.2 Удаление задач
 

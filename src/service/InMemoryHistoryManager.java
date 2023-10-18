@@ -1,18 +1,19 @@
 package service;
 
 import model.Task;
+import model.TypeTasks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    protected Map<Integer, Node> dataNode = new HashMap<>();
+    protected Map<Integer, TypeTasks.Node> dataNode = new HashMap<>();
     protected CustomLinkedList customLinkedMap = new CustomLinkedList();
-    protected Node head;
-    protected Node tail;
+    protected TypeTasks.Node head;
+    protected TypeTasks.Node tail;
 
-    public void removeNode(@NotNull Node node) {
+    public void removeNode(@NotNull TypeTasks.Node node) {
             if (node.prev != null) {
                 node.prev.next = node.next;
                 if (node.next == null) {
@@ -32,7 +33,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(@NotNull Task task) {
-
         if (this.dataNode != null) {
             int id = task.getId();
             remove(id);
@@ -44,7 +44,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         if (dataNode.containsKey(id)) {
-            Node node = dataNode.remove(id);
+            TypeTasks.Node node = dataNode.remove(id);
             if (node == null) {
                 return;
             }
@@ -59,7 +59,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-        Node node = head;
+        TypeTasks.Node node = head;
         while (node != null) {
             tasks.add(0, node.task);
             node = node.next;
@@ -67,19 +67,20 @@ public class InMemoryHistoryManager implements HistoryManager {
         return tasks;
     }
 
-
     public class CustomLinkedList {
 
         public void linkLast(Task task) {
-            Node node = new Node(head, task, null);
+            TypeTasks.Node node = new TypeTasks.Node(head, task, null);
             if (head == null) {
                 head = node;
             } else {
                 tail.next = node;
             }
-
             node.prev = tail;
             tail = node;
         }
     }
+
+
+
 }
