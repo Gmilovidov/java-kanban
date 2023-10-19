@@ -5,22 +5,22 @@ import java.util.Objects;
 public class Task {
     private static int count = 0;
     protected int id;
-    protected TypeTasks typeTasks;
+    protected TaskType taskType;
     protected String taskName;
     protected String taskDescription;
     protected StatusTasks statusTask;
 
     public Task(String name, String desc) {
         this.id = generateId();
-        this.typeTasks = TypeTasks.TASK;
+        this.taskType = TaskType.TASK;
         this.taskName = name;
         this.statusTask = StatusTasks.NEW;
         this.taskDescription = desc;
     }
 
-    public Task(int id, TypeTasks typeTasks, String taskName, StatusTasks statusTask, String taskDescription) {
+    public Task(int id, String taskName, StatusTasks statusTask, String taskDescription) {
         this.id = id;
-        this.typeTasks = typeTasks;
+        this.taskType = model.TaskType.TASK;
         this.taskName = taskName;
         this.statusTask = statusTask;
         this.taskDescription = taskDescription;
@@ -31,8 +31,8 @@ public class Task {
         return count;
     }
 
-    public TypeTasks getTypeTasks() {
-        return typeTasks;
+    public TaskType getTaskType() {
+        return taskType;
     }
 
     private Integer generateId() {
@@ -58,7 +58,7 @@ public class Task {
     @Override
     public String toString() {
         return id + "," +
-                typeTasks+ "," +
+                TaskType.TASK + "," +
                 taskName + "," +
                 statusTask + "," +
                 taskDescription + ",";
@@ -93,7 +93,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, typeTasks, taskName, taskDescription, statusTask);
+        return Objects.hash(id, taskType, taskName, taskDescription, statusTask);
     }
 
     public void setId(int id) {

@@ -11,14 +11,15 @@ public class Epic extends Task {
         super(taskName, taskDescription);
     }
 
-    public Epic(int id, TypeTasks typeTasks, String taskName, StatusTasks statusTask, String taskDescription) {
-        super(id, typeTasks, taskName, statusTask, taskDescription);
+    public Epic(int id,  String taskName, StatusTasks statusTask, String taskDescription) {
+        super(id, taskName, statusTask, taskDescription);
+        this.taskType = TaskType.EPIC;
     }
 
     @Override
     public String toString() {
         return id + "," +
-                typeTasks+ "," +
+                TaskType.EPIC + "," +
                 taskName + "," +
                 statusTask + "," +
                 taskDescription;

@@ -1,19 +1,19 @@
 package service;
 
 import model.Task;
-import model.TypeTasks;
+import model.TaskType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    protected Map<Integer, TypeTasks.Node> dataNode = new HashMap<>();
+    protected Map<Integer, TaskType.Node> dataNode = new HashMap<>();
     protected CustomLinkedList customLinkedMap = new CustomLinkedList();
-    protected TypeTasks.Node head;
-    protected TypeTasks.Node tail;
+    protected TaskType.Node head;
+    protected TaskType.Node tail;
 
-    public void removeNode(@NotNull TypeTasks.Node node) {
+    public void removeNode(@NotNull TaskType.Node node) {
             if (node.prev != null) {
                 node.prev.next = node.next;
                 if (node.next == null) {
@@ -44,7 +44,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         if (dataNode.containsKey(id)) {
-            TypeTasks.Node node = dataNode.remove(id);
+            TaskType.Node node = dataNode.remove(id);
             if (node == null) {
                 return;
             }
@@ -59,7 +59,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-        TypeTasks.Node node = head;
+        TaskType.Node node = head;
         while (node != null) {
             tasks.add(0, node.task);
             node = node.next;
@@ -70,7 +70,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public class CustomLinkedList {
 
         public void linkLast(Task task) {
-            TypeTasks.Node node = new TypeTasks.Node(head, task, null);
+            TaskType.Node node = new TaskType.Node(head, task, null);
             if (head == null) {
                 head = node;
             } else {

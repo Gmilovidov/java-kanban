@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     protected final File file;
-    protected final static String HeadSCV = "id,type,name,status,description,epic";
+
 
     public FileBackedTasksManager(File file) {
         this.file = file;
@@ -47,18 +47,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                }
            }
 
-
            String historyLine = br.readLine();
-           HistoryManager historyManager = new InMemoryHistoryManager();
            List<Integer> idHistory = CSVFormatter.historyFromString(historyLine);
            // Восстановление истории просмотров
            for (Integer id : idHistory) {
                if (fileBackedTasksManager.dataTask.containsKey(id)) {
-                  historyManager.add(fileBackedTasksManager.dataTask.get(id));
+                  fileBackedTasksManager.historyManager.add(fileBackedTasksManager.dataTask.get(id));
                } else if (fileBackedTasksManager.dataSubtask.containsKey(id)) {
-                   historyManager.add(fileBackedTasksManager.dataSubtask.get(id));
+                   fileBackedTasksManager.historyManager.add(fileBackedTasksManager.dataSubtask.get(id));
                } else if (fileBackedTasksManager.dataEpic.containsKey(id)) {
-                   historyManager.add(fileBackedTasksManager.dataEpic.get(id));
+                   fileBackedTasksManager.historyManager.add(fileBackedTasksManager.dataEpic.get(id));
                }
            }
        } catch (IOException e) {
@@ -67,7 +65,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
        return fileBackedTasksManager;
     }
 
-    public void save() {
+    private void save() {
         try {
             if(!file.exists()) {
                 Files.createFile(file.toPath());
@@ -76,7 +74,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Не удалось создать файл для записи.", e);
         }
         try (PrintWriter writer = new PrintWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.println(HeadSCV);
+            writer.println(CSVFormatter.HeadSCV);
             for (Task task : getTaskMap().values()) {
                 writer.println(task.toString());
             }

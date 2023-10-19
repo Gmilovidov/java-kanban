@@ -7,6 +7,8 @@ import java.util.List;
 
 public class CSVFormatter {
 
+    protected final static String HeadSCV = "id,type,name,status,description,epic";
+
     public CSVFormatter() {
     }
 
@@ -17,7 +19,7 @@ public class CSVFormatter {
         int idEpic = -1;
         String[] tokens = value.split(",");
         int id = Integer.parseInt(tokens[0]);
-        TypeTasks type = TypeTasks.valueOf(tokens[1]);
+        TaskType type = TaskType.valueOf(tokens[1]);
         String name = tokens[2];
         StatusTasks status = StatusTasks.valueOf(tokens[3]);
         String desc = tokens[4];
@@ -26,9 +28,9 @@ public class CSVFormatter {
         }
 
         return switch (type) {
-            case TASK -> new Task(id, type, name, status, desc);
-            case EPIC -> new Epic(id, type, name, status, desc);
-            case SUBTASK -> new Subtask(id, type, name, status, desc, idEpic);
+            case TASK -> new Task(id, name, status, desc);
+            case EPIC -> new Epic(id, name, status, desc);
+            case SUBTASK -> new Subtask(id, name, status, desc, idEpic);
         };
     }
 
@@ -38,22 +40,9 @@ public class CSVFormatter {
            for (Task task : tasks) {
                idHistory.add(task.getId());
            }
-           return idHistory.toString().replaceAll(  "^\\[|\\]$", "").replaceAll(" ", "");
+           return idHistory.toString().replaceAll(  "^\\[|]$", "")
+                   .replaceAll(" ", "");
     }
-
-//        public static String historyToString(HistoryManager manager) {
-//           List<Task> tasks = manager.getHistory();
-//           StringBuilder idStr = null;
-//           for (Task task : tasks) {
-//               assert false;
-//               idStr.append(task.getId().toString()).append(",");
-//           }
-//            assert false;
-//            return idStr.toString();
-//    }
-
-
-
 
     public static List<Integer> historyFromString(String historyStr) {
         List<Integer> historyId = new ArrayList<>();

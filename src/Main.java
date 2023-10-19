@@ -3,57 +3,30 @@ import service.FileBackedTasksManager;
 
 import java.io.File;
 
+import static service.FileBackedTasksManager.loadFromFile;
+
+
 public class Main {
 
     public static void main(String[] args) {
 
-        String fileName = "baseTasks.csv";
-
-        File file = new File("./resources/" + fileName);
-
-        FileBackedTasksManager taskManager1 = new FileBackedTasksManager(file);
-
-        FileBackedTasksManager taskManager2 = FileBackedTasksManager.loadFromFile(file);
-
-
-        Task task = new Task(0, TypeTasks.TASK, "Закончить учебу", StatusTasks.NEW,
-                "Иначе пока-пока моим деньгам");
-        Task task1 = new Task( 1,TypeTasks.TASK, "Покормить кота", StatusTasks.IN_PROGRESS,
-                "немного а то он жирный");
-        Epic epic = new Epic(2, TypeTasks.EPIC, "Переезд", StatusTasks.IN_PROGRESS,
-                "Нужно переехать в новую квартиру");
-        Subtask subtask = new Subtask(3, TypeTasks.SUBTASK, "Собрать", StatusTasks.IN_PROGRESS,
-                "оставить так как развожусь", 2);
-
-
-        taskManager1.createTask(task);
-        taskManager1.createTask(task1);
-        taskManager1.createEpic(epic);
-        taskManager1.createSubtask(subtask);
-
-        taskManager2.createTask(task);
-        taskManager2.createTask(task1);
-        taskManager2.createEpic(epic);
-        taskManager2.createSubtask(subtask);
-
-        taskManager1.getTaskById(0);
-        taskManager1.getTaskById(1);
-        taskManager1.getEpicById(2);
-        taskManager1.getSubtaskById(3);
-
-        taskManager2.getTaskById(0);
-        taskManager2.getTaskById(1);
-        taskManager2.getEpicById(2);
-        taskManager2.getSubtaskById(3);
-
-
-        if (taskManager1.equals(taskManager2)) {
-            System.out.println("Проверка прошла успешно");
-        } else {
-            System.out.println("Проверка завершилась неудачей");
-        }
-
-        taskManager1.save();
-
+        FileBackedTasksManager fileManager = new FileBackedTasksManager(new File("saveTasks2.csv"));
+        fileManager.createTask(new Task("task1", "Купить автомобиль"));
+        fileManager.createEpic(new Epic("new Epic1", "Новый Эпик"));
+        fileManager.createSubtask(new Subtask("New Subtask", "Подзадача", 2));
+        fileManager.createSubtask(new Subtask("New Subtask2", "Подзадача2", 2));
+        fileManager.getTaskById(1);
+        fileManager.getEpicById(2);
+        fileManager.getSubtaskById(3);
+        System.out.println(fileManager.getTaskMap().values());
+        System.out.println(fileManager.getEpicMap().values());
+        System.out.println(fileManager.getSubtaskMap().values());
+        System.out.println(fileManager.getHistory());
+        System.out.println("\n\n" + "new" + "\n\n");
+        FileBackedTasksManager fileBackedTasksManager = loadFromFile(new File("saveTasks2.csv"));
+        System.out.println(fileBackedTasksManager.getTaskMap().values());
+        System.out.println(fileBackedTasksManager.getEpicMap().values());
+        System.out.println(fileBackedTasksManager.getSubtaskMap().values());
+        System.out.println(fileBackedTasksManager.getHistory());
     }
 }
