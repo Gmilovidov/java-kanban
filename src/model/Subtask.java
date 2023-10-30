@@ -1,21 +1,23 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
 
     private Integer idEpic;
 
-    public Subtask(String taskName, String taskDescription, Integer idEpic) {
-        super(taskName, taskDescription);
+    public Subtask(int id, String taskName, StatusTasks statusTask,
+                   String taskDescription, Long duration, LocalDateTime startTime, Integer idEpic) {
+        super(id, taskName, statusTask, taskDescription, duration, startTime);
         this.idEpic = idEpic;
     }
 
-    public Subtask(int id,  String taskName, StatusTasks statusTask, String taskDescription, Integer idEpic) {
-        super(id, taskName, statusTask, taskDescription);
+    public Subtask(int id, String name, String desc, Long duration, LocalDateTime start, Integer idEpic) {
+        super(id, name, desc, duration, start);
         this.idEpic = idEpic;
-        this.taskType = TaskType.SUBTASK;
     }
+
 
     @Override
     public Integer getId() {
@@ -29,6 +31,8 @@ public class Subtask extends Task {
                 taskName + "," +
                 statusTask + "," +
                 taskDescription + "," +
+                duration + "," +
+                convertTimeFormat() + "," +
                 idEpic;
     }
 
@@ -39,6 +43,7 @@ public class Subtask extends Task {
     public void setIdEpic(Integer idEpic) {
         this.idEpic = idEpic;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -53,7 +58,4 @@ public class Subtask extends Task {
     public int hashCode() {
         return Objects.hash(super.hashCode(), idEpic);
     }
-
-
-
 }

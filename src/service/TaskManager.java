@@ -3,7 +3,6 @@ package service;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +12,11 @@ public interface TaskManager {
 
     // 2.4 Создание задач
 
-    void createTask(@NotNull Task task);
+    void createTask(Task task);
 
-    void createEpic(@NotNull Epic epic);
+    void createEpic(Epic epic);
 
-    void createSubtask(@NotNull Subtask subtask);
+    void createSubtask(Subtask subtask);
 
     // 2.1 Получение задач
 
@@ -45,11 +44,11 @@ public interface TaskManager {
 
     // 2.5 Обновление задач
 
-    void updateTask(@NotNull Task task);
+    void updateTask(Task task);
 
-    void updateEpic(@NotNull Epic epic);
+    void updateEpic(Epic epic);
 
-    void updateSubtask(@NotNull Subtask subtask);
+    void updateSubtask(Subtask subtask);
 
     // 2.6 Удаление по id
 
@@ -61,12 +60,15 @@ public interface TaskManager {
 
     // 3.1 Получение Subtask по idEpic
 
-    HashMap<Integer, Subtask> getSubtaskByIdEpic(@NotNull Epic epic);
+    HashMap<Integer, Subtask> getSubtaskByIdEpic(Epic epic);
 
-    void calculateStatEpic(@NotNull Integer idEpic);
+    void calculateStatEpic(Integer idEpic);
 
     List<Task> getHistory();
 
+    void setHistory(HistoryManager history);
+
+    boolean checkCrossTIme(Task task);
 
 
 }

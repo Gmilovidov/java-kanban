@@ -2,7 +2,7 @@ package service;
 
 import model.Task;
 import model.TaskType;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     protected TaskType.Node head;
     protected TaskType.Node tail;
 
-    public void removeNode(@NotNull TaskType.Node node) {
+    public void removeNode( TaskType.Node node) {
             if (node.prev != null) {
                 node.prev.next = node.next;
                 if (node.next == null) {
@@ -32,7 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void add(@NotNull Task task) {
+    public void add(Task task) {
         if (this.dataNode != null) {
             int id = task.getId();
             remove(id);
@@ -80,7 +80,5 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = node;
         }
     }
-
-
 
 }

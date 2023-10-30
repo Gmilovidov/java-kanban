@@ -2,20 +2,23 @@ package service;
 
 import model.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVFormatter {
 
-    protected final static String HeadSCV = "id,type,name,status,description,epic";
+    protected final static String HeadSCV = "id,type,name,status,description,duration,startTime,epic";
 
     public CSVFormatter() {
     }
 
     /**
-     * @param value формат id,type,name,status,description,epic
+     * @param value формат id,type,name,status,description,duration,startTime,epic
      */
     public static Task fromString(String value) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
         int idEpic = -1;
         String[] tokens = value.split(",");
         int id = Integer.parseInt(tokens[0]);
@@ -23,14 +26,16 @@ public class CSVFormatter {
         String name = tokens[2];
         StatusTasks status = StatusTasks.valueOf(tokens[3]);
         String desc = tokens[4];
-        if (tokens.length == 6) {
-            idEpic = Integer.parseInt(tokens[5]);
+        Long duration = Long.parseLong(tokens[5]);
+        LocalDateTime startTime = LocalDateTime.parse(tokens[6], formatter);
+        if (tokens.length == 8) {
+            idEpic = Integer.parseInt(tokens[7]);
         }
 
         return switch (type) {
-            case TASK -> new Task(id, name, status, desc);
-            case EPIC -> new Epic(id, name, status, desc);
-            case SUBTASK -> new Subtask(id, name, status, desc, idEpic);
+            case TASK -> new Task(id, name, status, desc, duration, startTime);
+            case EPIC -> new Epic(id, name, status, desc, duration, startTime);
+            case SUBTASK -> new Subtask(id, name, status, desc, duration, startTime, idEpic);
         };
     }
 
@@ -48,6 +53,7 @@ public class CSVFormatter {
         List<Integer> historyId = new ArrayList<>();
         String[] tokens = historyStr.split(",");
             for (String id : tokens) {
+                if (!id.equals(""))
                 historyId.add(Integer.parseInt(id));
             }
         return historyId;

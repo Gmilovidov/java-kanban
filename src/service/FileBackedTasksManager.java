@@ -3,25 +3,20 @@ package service;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     protected final File file;
-
 
     public FileBackedTasksManager(File file) {
         this.file = file;
     }
 
-    public static @NotNull FileBackedTasksManager loadFromFile(File file) {
+    public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
            br.readLine();
@@ -49,6 +44,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
            String historyLine = br.readLine();
            List<Integer> idHistory = CSVFormatter.historyFromString(historyLine);
+           Collections.reverse(idHistory);
            // Восстановление истории просмотров
            for (Integer id : idHistory) {
                if (fileBackedTasksManager.dataTask.containsKey(id)) {
@@ -92,19 +88,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createTask(@NotNull Task task) {
+    public void createTask(Task task) {
         super.createTask(task);
         save();
     }
 
     @Override
-    public void createEpic(@NotNull Epic epic) {
+    public void createEpic(Epic epic) {
         super.createEpic(epic);
         save();
     }
 
     @Override
-    public void createSubtask(@NotNull Subtask subtask) {
+    public void createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
         save();
     }
@@ -149,19 +145,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(@NotNull Task task) {
+    public void updateTask(Task task) {
         super.updateTask(task);
         save();
     }
 
     @Override
-    public void updateEpic(@NotNull Epic epic) {
+    public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         save();
     }
 
     @Override
-    public void updateSubtask(@NotNull Subtask subtask) {
+    public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
     }
@@ -185,7 +181,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public HashMap<Integer, Subtask> getSubtaskByIdEpic(@NotNull Epic epic) {
+    public HashMap<Integer, Subtask> getSubtaskByIdEpic(Epic epic) {
         HashMap<Integer, Subtask> subtaskByIdEpic = super.getSubtaskByIdEpic(epic);
         save();
         return subtaskByIdEpic;
@@ -210,4 +206,5 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public int hashCode() {
         return Objects.hash(file);
     }
+
 }
