@@ -14,25 +14,25 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> dataEpic;
     protected final Map<Integer, Subtask> dataSubtask;
     protected HistoryManager historyManager;
-    protected List<Task> tasksList;
+    protected TaskComparatorTime taskComparatorTime = new TaskComparatorTime();
+    private final Set<Task> sortSetTask = new TreeSet<>(taskComparatorTime);
 
     public InMemoryTaskManager() {
         dataTask = new HashMap<>();
         dataEpic = new HashMap<>();
         dataSubtask = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
-        tasksList = new ArrayList<>();
     }
 
     // 2.4 Создание задач
     @Override
     public void createTask(Task task) {
-        if (tasksList.isEmpty()) {
+        if (sortSetTask.isEmpty()) {
             dataTask.put(task.getId(), task);
-            tasksList.add(task);
+            sortSetTask.add(task);
         } else if (checkCrossTIme(task)) {
             dataTask.put(task.getId(), task);
-            tasksList.add(task);
+            sortSetTask.add(task);
         } else {
             System.out.println("Нельзя создать задачу с пересечением времени уже сохраненных задач");
         }
@@ -47,17 +47,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
-        if (tasksList.isEmpty()) {
+        if (sortSetTask.isEmpty()) {
             int idMentor = subtask.getIdEpic();
             dataEpic.get(idMentor).addSubtask(subtask.getId());
             dataSubtask.put(subtask.getId(), subtask);
-            tasksList.add(subtask);
+            sortSetTask.add(subtask);
             calculatorEpicDurationAndStart(idMentor);
         } else if (checkCrossTIme(subtask)) {
             int idMentor = subtask.getIdEpic();
             dataEpic.get(idMentor).addSubtask(subtask.getId());
             dataSubtask.put(subtask.getId(), subtask);
-            tasksList.add(subtask);
+            sortSetTask.add(subtask);
             calculatorEpicDurationAndStart(idMentor);
         } else {
             System.out.println("Нельзя создать задачу с пересечением времени уже сохраненных задач");
@@ -84,7 +84,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTask() {
         for(Task task : dataTask.values()) {
-            tasksList.remove(task);
+            sortSetTask.remove(task);
         }
         dataTask.clear();
     }
@@ -102,7 +102,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtask() {
         ArrayList<Integer> idSubtask = new ArrayList<>();
         for(Task subtask : dataSubtask.values()) {
-            tasksList.remove(subtask);
+            sortSetTask.remove(subtask);
         }
         dataSubtask.clear();
         for(Integer id : dataEpic.keySet()) {
@@ -138,8 +138,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (checkCrossTIme(task)) {
-            tasksList.remove(dataTask.get(task.getId()));
-            tasksList.add(task);
+            sortSetTask.remove(dataTask.get(task.getId()));
+            sortSetTask.add(task);
             dataTask.remove(task.getId());
             dataTask.put(task.getId(), task);
         } else {
@@ -161,8 +161,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         if (checkCrossTIme(subtask)) {
-            tasksList.remove(subtask);
-            tasksList.add(subtask);
+            sortSetTask.remove(subtask);
+            sortSetTask.add(subtask);
             dataSubtask.remove(subtask.getId());
             dataSubtask.put(subtask.getId(), subtask);
             calculateStatEpic(subtask.getIdEpic());
@@ -247,24 +247,23 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    public Set<Task> getPrioritizedTasks() {
-        TaskComparatorTime taskComparatorTime = new TaskComparatorTime();
-        Set<Task> priorityTask = new TreeSet<>(taskComparatorTime);
-        priorityTask.addAll(tasksList);
-        return priorityTask;
+    public Set<Task> getPrioritizedTasks(Set<Task> sortSetTask) {
+        return sortSetTask;
     }
 
+
+    //Оставлю так, чтоб тест оставался в TaskManagerTest?
     @Override
     public boolean checkCrossTIme(Task task) {
-        for (Task savedTask : tasksList) {
-            boolean cross1 = task.getStartTime().isAfter(savedTask.getStartTime()) //1
+        for (Task savedTask : sortSetTask) {
+            boolean cross1 = task.getStartTime().isAfter(savedTask.getStartTime())
                     && task.getEndTime().isBefore(savedTask.getStartTime());
-            boolean cross2 = task.getStartTime().isBefore(savedTask.getStartTime())  //2
+            boolean cross2 = task.getStartTime().isBefore(savedTask.getStartTime())
                     && task.getEndTime().isAfter(savedTask.getEndTime());
-            boolean cross3 = task.getStartTime().isBefore(savedTask.getStartTime())  //3
+            boolean cross3 = task.getStartTime().isBefore(savedTask.getStartTime())
                     && task.getEndTime().isAfter(savedTask.getStartTime())
                     && task.getEndTime().isBefore(savedTask.getEndTime());
-            boolean cross4 = task.getStartTime().isAfter(savedTask.getStartTime()) //4
+            boolean cross4 = task.getStartTime().isAfter(savedTask.getStartTime())
                     && task.getEndTime().isAfter(savedTask.getEndTime())
                     && task.getStartTime().isBefore(savedTask.getEndTime());
 
@@ -275,7 +274,7 @@ public class InMemoryTaskManager implements TaskManager {
         return true;
     }
 
-    public void calculatorEpicDurationAndStart(Integer idEpic) {
+    private void calculatorEpicDurationAndStart(Integer idEpic) {
         Epic curEpic = dataEpic.get(idEpic);
         ArrayList<Integer> idSubtask = curEpic.getIdSubtask();
         if (idSubtask.isEmpty()) {

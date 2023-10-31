@@ -5,23 +5,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
-//    private static int count = 0; нужный
+
     protected int id;
     protected TaskType taskType;
     protected String taskName;
     protected String taskDescription;
     protected StatusTasks statusTask;
     protected long duration;
-    LocalDateTime startTime;
-
-//    public Task(String name, String desc, Long duration) {  нужный
-//        this.id = generateId();
-//        this.taskType = TaskType.TASK;
-//        this.taskName = name;
-//        this.statusTask = StatusTasks.NEW;
-//        this.taskDescription = desc;
-//        this.duration = duration;
-//    }
+    protected LocalDateTime startTime;
 
     public Task(int id, String name, String desc, Long duration, LocalDateTime startTime) {
         this.id = id;
@@ -55,18 +46,9 @@ public class Task {
         this.taskDescription = desc;
     }
 
-
-//    public static int getCount() {  нужный
-//        return count;
-//    }
-
     public TaskType getTaskType() {
         return taskType;
     }
-
-//    private Integer generateId() { нужный
-//        return ++count;
-//    }
 
     public void setId(Integer id) {
         this.id = id;

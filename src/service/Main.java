@@ -14,9 +14,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /* Возникла проблема с генерацией айди,
-        пока убрал эту функцию так как у меня не работали тесты и ломалась реализация */
-
         FileBackedTasksManager fileManager = new FileBackedTasksManager(new File("saveTasks2.csv"));
         fileManager.createTask(new Task(1,"task1", "Купить автомобиль",
                 10L, LocalDateTime.now()));

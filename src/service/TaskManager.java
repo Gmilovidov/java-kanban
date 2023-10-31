@@ -69,8 +69,6 @@ public interface TaskManager {
     void setHistory(HistoryManager history);
 
     boolean checkCrossTIme(Task task);
-
-
 }
 
 

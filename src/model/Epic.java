@@ -11,18 +11,14 @@ public class Epic extends Task {
 
     public Epic(int id, String name, String desc) {
         super(id, name, desc);
-
+        this.taskType = TaskType.EPIC;
     }
 
-    public Epic(int id, String taskName, StatusTasks statusTask, String taskDescription, Long duration, LocalDateTime startTime) {
+    public Epic(int id, String taskName, StatusTasks statusTask,
+                String taskDescription, Long duration, LocalDateTime startTime) {
         super(id, taskName, statusTask, taskDescription, duration, startTime);
     }
-
-    public Epic(int id, String name, String desc, ArrayList<Integer> idSubtask) {
-        super(id, name, desc);
-        this.idSubtask = idSubtask;
-    }
-
+    
     @Override
     public String toString() {
         return id + "," +
