@@ -43,7 +43,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
            }
 
            String historyLine = br.readLine();
-           List<Integer> idHistory = CSVFormatter.historyFromString(historyLine);
+           List<Integer> idHistory = new ArrayList<>();
+           if (historyLine != null) {
+                idHistory = CSVFormatter.historyFromString(historyLine);
+           }
            Collections.reverse(idHistory);
            // Восстановление истории просмотров
            for (Integer id : idHistory) {
@@ -61,7 +64,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
        return fileBackedTasksManager;
     }
 
-    private void save() {
+    public void save() {
         try {
             if(!file.exists()) {
                 Files.createFile(file.toPath());
