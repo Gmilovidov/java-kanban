@@ -17,6 +17,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
+
 public class HttpTaskServer implements HttpHandler {
 
     TaskManager taskManager;
@@ -48,8 +49,22 @@ public class HttpTaskServer implements HttpHandler {
     }
 
     private void taskServerGetAllTasks(HttpExchange httpExchange) throws IOException {
+       httpTaskManager.loadFromServer();
 
-       writeResponse(httpExchange, gson.toJson(taskManager.getTaskMap()), 200);
+       String gsonTasks = gson.toJson(taskManager.getTaskMap());
+       if (gsonTasks != null && gsonTasks.length() > 0) {
+           gsonTasks = gsonTasks.substring(0, gsonTasks.length() - 1);
+       }
+       String gsonSubtask = gson.toJson(taskManager.getSubtaskMap());
+        if (gsonSubtask != null && gsonSubtask.length() > 0) {
+            gsonSubtask = gsonSubtask.substring(1, gsonSubtask.length() - 1);
+        }
+       String gsonEpic = gson.toJson(taskManager.getEpicMap());
+        if (gsonEpic != null && gsonEpic.length() > 0) {
+            gsonEpic = gsonEpic.substring(1);
+        }
+       String AllGson = gsonTasks + "," + gsonSubtask + "," + gsonEpic;
+       writeResponse(httpExchange, AllGson, 200);
     }
 
     private void taskServerCreateTask(HttpExchange httpExchange) throws IOException {
@@ -58,7 +73,11 @@ public class HttpTaskServer implements HttpHandler {
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         try {
             Task task = gson.fromJson(body, Task.class);
+            if (taskManager.getTaskMap().containsKey(task.getId())) {
+                taskManager.updateTask(task);
+            }
             taskManager.createTask(task);
+
         } catch (JsonSyntaxException exception) {
             writeResponse(httpExchange, "Получен некорректный JSON", 400);
         }
@@ -75,9 +94,10 @@ public class HttpTaskServer implements HttpHandler {
         if (pathParts[2].equals("task") && requestMethod.equals("GET") && pathParts.length == 4) {
             return Endpoint.GET_TASK_BY_ID;
         }
-        if (requestMethod.equals("POST") &&pathParts[2].equals("task")) {
+        if (requestMethod.equals("POST") && pathParts[2].equals("task")) {
             return Endpoint.POST_ADD_UPDATE_TASK;
         }
+
         return Endpoint.UNKNOWN;
     }
 
