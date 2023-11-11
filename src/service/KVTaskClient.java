@@ -9,7 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    private static final String URL = "http://localhost:8078/";
+    private static final String URL = "http://localhost:8077/";
 
     private final String apiToken;
     private final HttpClient httpClient;

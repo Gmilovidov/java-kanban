@@ -71,7 +71,9 @@ public class HttpTaskServer implements HttpHandler {
             case DELETE_ALL_TASKS: {
                 taskServerDeleteAllTask(httpExchange);
             }
-
+            case GET_HISTORY: {
+                taskServerGetHistory(httpExchange);
+            }
 
             default:
                 writeResponse(httpExchange,"Такого эндпоинта не существует", 404);

@@ -55,7 +55,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
            }
        }
 
-       JsonElement jsonEpics = JsonParser.parseString(client.load("epic"));
+       JsonElement jsonEpics = JsonParser.parseString(client.load("epics"));
        if (!jsonEpics.isJsonNull()) {
            JsonArray jsonArrayEpics = jsonEpics.getAsJsonArray();
            for (JsonElement jsonEpic : jsonArrayEpics) {
