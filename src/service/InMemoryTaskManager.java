@@ -246,8 +246,8 @@ public class InMemoryTaskManager implements TaskManager {
     public void setHistory(HistoryManager historyManager) {
         this.historyManager = historyManager;
     }
-
-    public Set<Task> getPrioritizedTasks(Set<Task> sortSetTask) {
+    @Override
+    public Set<Task> getPrioritizedTasks() {
         return sortSetTask;
     }
 
@@ -296,5 +296,6 @@ public class InMemoryTaskManager implements TaskManager {
             curEpic.setStartTime(startTimeFirst);
         }
     }
+
 }
 

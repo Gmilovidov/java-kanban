@@ -9,41 +9,41 @@ public class Task {
     protected int id;
     protected TaskType taskType;
     protected String taskName;
-    protected String taskDescription;
+    protected String description;
     protected StatusTasks statusTask;
     protected long duration;
     protected LocalDateTime startTime;
 
-    public Task(int id, String name, String desc, Long duration, LocalDateTime startTime) {
+    public Task(int id, String taskName, String description, Long duration, LocalDateTime startTime) {
         this.id = id;
         this.taskType = TaskType.TASK;
-        this.taskName = name;
+        this.taskName = taskName;
         this.statusTask = StatusTasks.NEW;
-        this.taskDescription = desc;
+        this.description = description;
         this.duration = duration;
         this.startTime = startTime;
     }
 
     public Task(int id, String taskName, StatusTasks statusTask,
-                String taskDescription, Long duration, LocalDateTime startTime) {
+                String description, Long duration, LocalDateTime startTime) {
         this.id = id;
         this.taskType = model.TaskType.TASK;
         this.taskName = taskName;
         this.statusTask = statusTask;
-        this.taskDescription = taskDescription;
+        this.description = description;
         this.duration = duration;
         this.startTime = startTime;
     }
 
-    public Task(String taskName, String taskDescription) {
+    public Task(String taskName, String description) {
         this.taskName = taskName;
-        this.taskDescription = taskDescription;
+        this.description = description;
     }
 
-    public Task(int id, String name, String desc) {
+    public Task(int id, String taskName, String description) {
         this.id = id;
-        this.taskName = name;
-        this.taskDescription = desc;
+        this.taskName = taskName;
+        this.description = description;
     }
 
     public TaskType getTaskType() {
@@ -77,7 +77,7 @@ public class Task {
                 TaskType.TASK + "," +
                 taskName + "," +
                 statusTask + "," +
-                taskDescription + "," +
+                description + "," +
                 duration + "," +
                 convertTimeFormat() + ",";
     }
@@ -91,11 +91,11 @@ public class Task {
     }
 
     public String getTaskDescription() {
-        return taskDescription;
+        return description;
     }
 
     public void setTaskDescription(String taskDescription) {
-        this.taskDescription = taskDescription;
+        this.description = taskDescription;
     }
 
     public void setId(int id) {
@@ -111,14 +111,14 @@ public class Task {
                 && duration == task.duration
                 && taskType == task.taskType
                 && Objects.equals(taskName, task.taskName)
-                && Objects.equals(taskDescription, task.taskDescription)
+                && Objects.equals(description, task.description)
                 && statusTask == task.statusTask
                 && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, taskType, taskName, taskDescription, statusTask, duration, startTime);
+        return Objects.hash(id, taskType, taskName, description, statusTask, duration, startTime);
     }
 
     public long getDuration() {

@@ -10,10 +10,13 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    protected final File file;
+    protected  File file;
 
     public FileBackedTasksManager(File file) {
         this.file = file;
+    }
+
+    public FileBackedTasksManager() {
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {

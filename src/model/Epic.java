@@ -7,16 +7,16 @@ import java.util.Objects;
 public class Epic extends Task {
 
     private ArrayList<Integer> idSubtask = new ArrayList<>();
-    private LocalDateTime endTimeEpic;
 
-    public Epic(int id, String name, String desc) {
-        super(id, name, desc);
+    public Epic(int id, String name, String description) {
+        super(id, name, description);
         this.taskType = TaskType.EPIC;
     }
 
     public Epic(int id, String taskName, StatusTasks statusTask,
-                String taskDescription, Long duration, LocalDateTime startTime) {
-        super(id, taskName, statusTask, taskDescription, duration, startTime);
+                String description, Long duration, LocalDateTime startTime) {
+        super(id, taskName, statusTask, description, duration, startTime);
+        this.taskType = TaskType.EPIC;
     }
     
     @Override
@@ -25,7 +25,7 @@ public class Epic extends Task {
                 TaskType.EPIC + "," +
                 taskName + "," +
                 statusTask + "," +
-                taskDescription + "," +
+                description + "," +
                 duration + "," +
                 convertTimeFormat() + ",";
     }

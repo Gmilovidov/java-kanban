@@ -7,6 +7,7 @@ import model.Task;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -69,6 +70,8 @@ public interface TaskManager {
     void setHistory(HistoryManager history);
 
     boolean checkCrossTIme(Task task);
+
+    Set<Task> getPrioritizedTasks();
 }
 
 

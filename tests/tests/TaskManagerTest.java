@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import service.TaskManager;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +17,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected TaskManagerTest(T taskManager){
         this.taskManager = taskManager;
     }
+
+
 
     @Test
     void createTask() {

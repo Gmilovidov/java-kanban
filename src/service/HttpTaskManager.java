@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-   final KVTaskClient client;
+
+    final KVTaskClient client;
+
    private static final Gson gson = new GsonBuilder()
            .registerTypeAdapter(LocalDateTime.class, new DataTimeAdapter())
            .create();
 
+
    public HttpTaskManager() {
-       super(null);
        client = new KVTaskClient();
    }
 
@@ -36,7 +38,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
    }
 
 
-   public void loadFromServer() {
+   public  void loadFromServer() {
        JsonElement jsonTasks = JsonParser.parseString(client.load("tasks"));
        if (!jsonTasks.isJsonNull()) {
            JsonArray jsonArrayTasks = jsonTasks.getAsJsonArray();
