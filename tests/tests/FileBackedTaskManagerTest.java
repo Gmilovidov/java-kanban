@@ -33,7 +33,4 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksMa
         assertEquals(task, fileBackedTasksManager.getTaskById(1));
     }
 
-    @Test
-    public void LoadFromFileShouldReturnIOExceptionForNullIdHistory() {}
-
 }

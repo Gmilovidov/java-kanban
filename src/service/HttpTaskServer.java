@@ -10,7 +10,6 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.io.IOException;
@@ -30,8 +29,8 @@ public class HttpTaskServer implements HttpHandler {
             .create();
     private final HttpTaskManager httpTaskManager = new HttpTaskManager();
 
-    public HttpTaskServer(FileBackedTasksManager fileBackedTasksManager) {
-        taskManager = fileBackedTasksManager;
+    public HttpTaskServer() {
+        taskManager = httpTaskManager;
     }
 
     @Override
@@ -102,11 +101,11 @@ public class HttpTaskServer implements HttpHandler {
 
     private void taskServerCreateTask(HttpExchange httpExchange) throws IOException {
         httpTaskManager.loadFromServer();
-
         InputStream inputStream = httpExchange.getRequestBody();
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         try {
             Task task = gson.fromJson(body, Task.class);
+            System.out.println(task.toString());
             if (taskManager.getTaskMap().containsKey(task.getId())) {
                 taskManager.updateTask(task);
             } else {
@@ -338,10 +337,9 @@ public class HttpTaskServer implements HttpHandler {
         HttpServer httpServer = HttpServer.create();
         httpServer.bind(new InetSocketAddress(8081), 0);
         httpServer.createContext("/tasks",
-                new HttpTaskServer(FileBackedTasksManager.loadFromFile(new File("saveTasks2.csv"))));
+                new HttpTaskServer());
         httpServer.start();
         System.out.println("Сервер на порту 8081 запущен");
-
 
     }
 }
