@@ -12,12 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-/**
- * все перепробовал, не получается зарегестрироваться на КVServer
- * idea говорит что ошибка в конструкторе, как ее обойти не понимаю
- * ошибка java.net.ConnectException
- */
-
 public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
 
     KVServer kvServer;
@@ -30,11 +24,11 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
 
     @BeforeEach
     public void beforeEach() throws IOException {
+        kvServer.start();
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new DataTimeAdapter())
                 .create();
-        kvServer.start();
-
+        httpTaskManager = (HttpTaskManager) Managers.getDefault();
     }
 
     @AfterEach
@@ -43,7 +37,7 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
     }
 
     @Test
-    public void createTasks() {
+    public void createTasks() throws IOException {
         Task task = new Task(1,"name", "desc", 15L, LocalDateTime.now());
         createTask();
         Task taskLoaded = httpTaskManager.getTaskById(1);

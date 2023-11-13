@@ -6,6 +6,7 @@ import model.Subtask;
 import model.Task;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -49,13 +50,19 @@ public class InMemoryTaskManager implements TaskManager {
     public void createSubtask(Subtask subtask) {
         if (sortSetTask.isEmpty()) {
             int idMentor = subtask.getIdEpic();
-            dataEpic.get(idMentor).addSubtask(subtask.getId());
+            if (dataEpic.containsKey(idMentor)) {
+                if (!dataEpic.get(idMentor).getIdSubtask().contains(subtask.getId()))
+                dataEpic.get(idMentor).addSubtask(subtask.getId());
+            }
             dataSubtask.put(subtask.getId(), subtask);
             sortSetTask.add(subtask);
             calculatorEpicDurationAndStart(idMentor);
         } else if (checkCrossTIme(subtask)) {
             int idMentor = subtask.getIdEpic();
-            dataEpic.get(idMentor).addSubtask(subtask.getId());
+            if (dataEpic.containsKey(idMentor)) {
+                if (!dataEpic.get(idMentor).getIdSubtask().contains(subtask.getId()))
+                dataEpic.get(idMentor).addSubtask(subtask.getId());
+            }
             dataSubtask.put(subtask.getId(), subtask);
             sortSetTask.add(subtask);
             calculatorEpicDurationAndStart(idMentor);
@@ -165,8 +172,10 @@ public class InMemoryTaskManager implements TaskManager {
             sortSetTask.add(subtask);
             dataSubtask.remove(subtask.getId());
             dataSubtask.put(subtask.getId(), subtask);
-            calculateStatEpic(subtask.getIdEpic());
-            calculatorEpicDurationAndStart(subtask.getIdEpic());
+            if (dataEpic.containsKey(subtask.getIdEpic())) {
+                calculateStatEpic(subtask.getIdEpic());
+                calculatorEpicDurationAndStart(subtask.getIdEpic());
+            }
         } else {
             System.out.println("Нельзя создать задачу с пересечением времени уже сохраненных задач");
         }
@@ -220,6 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
             curEpic.setStatusTask(StatusTasks.NEW);
             return;
         }
+
         if (!dataSubtask.isEmpty()) {
             Subtask sub1 = dataSubtask.get(idSubtask.get(0));
             StatusTasks stat = sub1.getStatusTask();
@@ -234,6 +244,8 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             curEpic.setStatusTask(stat);
+        } else {
+            curEpic.setStatusTask(StatusTasks.NEW);
         }
     }
 
@@ -275,19 +287,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void calculatorEpicDurationAndStart(Integer idEpic) {
+
         Epic curEpic = dataEpic.get(idEpic);
         ArrayList<Integer> idSubtask = curEpic.getIdSubtask();
         if (idSubtask.isEmpty()) {
             curEpic.setDuration(0);
-            curEpic.setStartTime(LocalDateTime.now());
         }
         if (!idSubtask.isEmpty() && !dataSubtask.isEmpty()) {
             long durationEpic = 0L;
             LocalDateTime startTimeFirst = LocalDateTime.now();
-            for (Integer id:
-                    idSubtask) {
+            for (Integer id: dataSubtask.keySet()) {
                     durationEpic += dataSubtask.get(id).getDuration();
-                 durationEpic += dataSubtask.get(id).getDuration();
                 if (dataSubtask.get(id).getStartTime().isBefore(startTimeFirst)) {
                     startTimeFirst = dataSubtask.get(id).getStartTime();
                 }

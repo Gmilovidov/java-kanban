@@ -67,7 +67,7 @@ public class Task {
     }
 
     public String convertTimeFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return startTime.format(formatter);
     }
 

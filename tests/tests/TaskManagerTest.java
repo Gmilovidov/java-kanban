@@ -18,8 +18,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         this.taskManager = taskManager;
     }
 
-
-
     @Test
     void createTask() {
         Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
@@ -43,8 +41,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(epic, savedEpic, "Эпики не совпадают");
         assertEquals(StatusTasks.NEW,savedEpic.getStatusTask());
     }
-
-
 
     @Test
     void createSubtask() {
