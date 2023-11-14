@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
-
     protected int id;
     protected TaskType taskType;
     protected String taskName;
@@ -14,8 +13,7 @@ public class Task {
     protected long duration;
     protected LocalDateTime startTime;
 
-    public Task(int id, String taskName, String description, Long duration, LocalDateTime startTime) {
-        this.id = id;
+    public Task(String taskName, String description, Long duration, LocalDateTime startTime) {
         this.taskType = TaskType.TASK;
         this.taskName = taskName;
         this.statusTask = StatusTasks.NEW;
@@ -27,13 +25,14 @@ public class Task {
     public Task(int id, String taskName, StatusTasks statusTask,
                 String description, Long duration, LocalDateTime startTime) {
         this.id = id;
-        this.taskType = model.TaskType.TASK;
+        this.taskType = TaskType.TASK;
         this.taskName = taskName;
         this.statusTask = statusTask;
         this.description = description;
         this.duration = duration;
         this.startTime = startTime;
     }
+
 
     public Task(String taskName, String description) {
         this.taskName = taskName;
@@ -46,9 +45,6 @@ public class Task {
         this.description = description;
     }
 
-    public TaskType getTaskType() {
-        return taskType;
-    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -79,7 +75,7 @@ public class Task {
                 statusTask + "," +
                 description + "," +
                 duration + "," +
-                convertTimeFormat() + ",";
+                startTime + ",";
     }
 
     public String getTaskName() {

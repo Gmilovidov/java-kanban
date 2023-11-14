@@ -28,7 +28,7 @@ public class HttpTaskServer implements HttpHandler {
     private  final static Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new DataTimeAdapter())
             .create();
-    private final HttpTaskManager httpTaskManager = new HttpTaskManager();
+    private final HttpTaskManager httpTaskManager = new HttpTaskManager("http://localhost:8077/");
 
     public HttpTaskServer() {
         taskManager = httpTaskManager;
@@ -93,33 +93,26 @@ public class HttpTaskServer implements HttpHandler {
 
         String json = gson.toJson(taskManager.getPrioritizedTasks());
 
-        if (!json.isEmpty()) {
+        if (!json.isEmpty() && !json.equals("[]")) {
             writeResponse(httpExchange, json, 200);
         } else {
-            writeResponse(httpExchange, "Список пустой", 400);
+            writeResponse(httpExchange, "список приоритетных задач пустой", 400);
         }
     }
 
     private void taskServerGetAllTasks(HttpExchange httpExchange) throws IOException {
        httpTaskManager.loadFromServer();
-       if (!taskManager.getTaskMap().isEmpty() && !taskManager.getSubtaskMap().isEmpty() && !taskManager.getEpicMap().isEmpty()) {
-           String gsonTasks = gson.toJson(taskManager.getTaskMap());
-           if (gsonTasks != null && gsonTasks.length() > 0) {
-               gsonTasks = gsonTasks.substring(0, gsonTasks.length() - 1);
-           }
-           String gsonSubtask = gson.toJson(taskManager.getSubtaskMap());
-           if (gsonSubtask != null && gsonSubtask.length() > 0) {
-               gsonSubtask = gsonSubtask.substring(1, gsonSubtask.length() - 1);
-           }
-           String gsonEpic = gson.toJson(taskManager.getEpicMap());
-           if (gsonEpic != null && gsonEpic.length() > 0) {
-               gsonEpic = gsonEpic.substring(1);
-           }
-           String AllGson = gsonTasks + "," + gsonSubtask + "," + gsonEpic;
-           writeResponse(httpExchange, AllGson, 200);
-       } else {
-           writeResponse(httpExchange, "задач нет", 400);
-       }
+
+       String gsonTasks;
+       String gsonSubtask;
+       String gsonEpic;
+       gsonTasks = gson.toJson(taskManager.getTaskMap());
+       gsonSubtask = gson.toJson(taskManager.getSubtaskMap());
+       gsonEpic = gson.toJson(taskManager.getEpicMap());
+        if (taskManager.getTaskMap().isEmpty() && taskManager.getSubtaskMap().isEmpty() && taskManager.getEpicMap().isEmpty()) {
+            writeResponse(httpExchange, "задач нет", 400);
+        }
+        writeResponse(httpExchange, gsonTasks + gsonSubtask + gsonEpic, 200);
     }
 
     private void taskServerCreateTask(HttpExchange httpExchange) throws IOException {
@@ -131,10 +124,10 @@ public class HttpTaskServer implements HttpHandler {
             Task task = gson.fromJson(body, Task.class);
             if (taskManager.getTaskMap().containsKey(task.getId())) {
                 taskManager.updateTask(task);
-                writeResponse(httpExchange, "Таска обновлена", 200);
+                writeResponse(httpExchange, "Таска обновлена", 201);
             } else {
                 taskManager.createTask(task);
-                writeResponse(httpExchange, "Таска добавлена", 200);
+                writeResponse(httpExchange, "Таска добавлена", 201);
             }
         } catch (JsonSyntaxException exception) {
             writeResponse(httpExchange, "Получен некорректный JSON", 400);
@@ -145,16 +138,17 @@ public class HttpTaskServer implements HttpHandler {
 
     private void taskServerCreateSubtask(HttpExchange httpExchange) throws IOException {
         httpTaskManager.loadFromServer();
+
         InputStream inputStream = httpExchange.getRequestBody();
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         try {
             Subtask subtask = gson.fromJson(body, Subtask.class);
             if (taskManager.getSubtaskMap().containsKey(subtask.getId())) {
                 taskManager.updateSubtask(subtask);
-                writeResponse(httpExchange, "сабтаска обновлена", 200);
+                writeResponse(httpExchange, "сабтаска обновлена", 201);
             } else {
                 taskManager.createSubtask(subtask);
-                writeResponse(httpExchange, "сабтаска добавлена", 200);
+                writeResponse(httpExchange, "сабтаска добавлена", 201);
             }
         } catch (JsonSyntaxException exception) {
             writeResponse(httpExchange, "Получен некорректный JSON", 400);
@@ -165,16 +159,17 @@ public class HttpTaskServer implements HttpHandler {
 
     private void taskServerCreateEpic(HttpExchange httpExchange) throws IOException {
         httpTaskManager.loadFromServer();
+
         InputStream inputStream = httpExchange.getRequestBody();
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         try {
             Epic epic = gson.fromJson(body, Epic.class);
             if (taskManager.getEpicMap().containsKey(epic.getId())) {
                 taskManager.updateEpic(epic);
-                writeResponse(httpExchange, "эпик обновлен", 200);
+                writeResponse(httpExchange, "эпик обновлен", 201);
             } else {
                 taskManager.createEpic(epic);
-                writeResponse(httpExchange, "эпик добавлен", 200);
+                writeResponse(httpExchange, "эпик добавлен", 201);
             }
 
         } catch (JsonSyntaxException exception) {
@@ -302,7 +297,11 @@ public class HttpTaskServer implements HttpHandler {
 
          if (!taskManager.getHistory().isEmpty()) {
              String json = gson.toJson(taskManager.getHistory());
-             writeResponse(httpExchange, json, 200);
+             if (!json.equals("[]")) {
+                 writeResponse(httpExchange, json, 200);
+             } else {
+                 writeResponse(httpExchange, "список истории пустой", 400);
+             }
          }
     }
 
@@ -325,7 +324,7 @@ public class HttpTaskServer implements HttpHandler {
             return Endpoint.GET_TASK_BY_ID;
         }
 
-        if ( pathParts[2].equals("task") && requestMethod.equals("POST") ) {
+        if ( pathParts[2].equals("task") && requestMethod.equals("POST")) {
             return Endpoint.POST_ADD_UPDATE_TASK;
         }
         if (pathParts[2].equals("task") && requestMethod.equals("DELETE") && getIdUrl(httpExchange).isPresent()) {

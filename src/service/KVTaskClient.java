@@ -9,12 +9,13 @@ import java.net.http.HttpResponse;
 
 
 public class KVTaskClient {
-    private static final String URL = "http://localhost:8077/";
+    private  final String URL;
 
     private final String apiToken;
     private final HttpClient httpClient;
 
-    public KVTaskClient() {
+    public KVTaskClient(String URL) {
+        this.URL = URL;
         httpClient = HttpClient.newHttpClient();
         apiToken = register();
     }

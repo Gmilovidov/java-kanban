@@ -9,16 +9,18 @@ public class Subtask extends Task {
 
     public Subtask(int id, String taskName, StatusTasks statusTask,
                    String description, Long duration, LocalDateTime startTime, Integer idEpic) {
-        super(id, taskName, statusTask, description, duration, startTime);
+        super(id,taskName, statusTask, description, duration, startTime);
         this.idEpic = idEpic;
         this.taskType = TaskType.SUBTASK;
     }
 
-    public Subtask(int id, String taskName, String description, Long duration, LocalDateTime start, Integer idEpic) {
-        super(id, taskName, description, duration, start);
+    public Subtask(String taskName, String description, Long duration, LocalDateTime startTime, Integer idEpic) {
+        super(taskName, description, duration, startTime);
         this.idEpic = idEpic;
         this.taskType = TaskType.SUBTASK;
     }
+
+
 
 
     @Override
@@ -34,7 +36,7 @@ public class Subtask extends Task {
                 statusTask + "," +
                 description + "," +
                 duration + "," +
-                convertTimeFormat() + "," +
+                startTime + "," +
                 idEpic;
     }
 

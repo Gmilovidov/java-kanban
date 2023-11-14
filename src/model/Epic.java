@@ -8,8 +8,8 @@ public class Epic extends Task {
 
     private ArrayList<Integer> idSubtask = new ArrayList<>();
 
-    public Epic(int id, String name, String description) {
-        super(id, name, description);
+    public Epic(String name, String description) {
+        super(name, description);
         this.taskType = TaskType.EPIC;
     }
 
@@ -17,8 +17,14 @@ public class Epic extends Task {
                 String description, Long duration, LocalDateTime startTime) {
         super(id, taskName, statusTask, description, duration, startTime);
         this.taskType = TaskType.EPIC;
+        this.id = id;
     }
-    
+
+    public Epic(int id, String taskName, String description) {
+        super(id, taskName, description);
+        this.startTime = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return id + "," +
@@ -27,7 +33,7 @@ public class Epic extends Task {
                 statusTask + "," +
                 description + "," +
                 duration + "," +
-                convertTimeFormat() + ",";
+                startTime + ",";
     }
 
     @Override

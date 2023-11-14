@@ -1,6 +1,8 @@
 package tests;
 
+import model.StatusTasks;
 import model.Task;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.*;
 
@@ -11,8 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
-    public FileBackedTaskManagerTest() {
-        super(new FileBackedTasksManager(new File("tests/test.csv")));
+    @BeforeEach
+    public void beforeEach() {
+        taskManager = new FileBackedTasksManager(new File("tests/test.csv"));
     }
 
     @Test
@@ -26,7 +29,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksMa
 
     @Test
     public void LoadFromFile() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task = new Task(1,"task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(new File("tests/test.csv"));
         fileBackedTasksManager.createTask(task);
         FileBackedTasksManager.loadFromFile(new File("tests/test.csv"));

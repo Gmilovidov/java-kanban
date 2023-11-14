@@ -1,6 +1,7 @@
 package tests;
 
 import model.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import service.TaskManager;
@@ -12,15 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
-    private final T taskManager;
+    protected  T taskManager;
 
-    protected TaskManagerTest(T taskManager){
-        this.taskManager = taskManager;
-    }
 
     @Test
     void createTask() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task = new Task(1, "task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
         taskManager.createTask(task);
         final int taskId = task.getId();
         final Task savedTask = taskManager.getTaskById(taskId);
@@ -31,7 +29,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createEpic() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
         taskManager.createEpic(epic);
         final int epicId = epic.getId();
         final Epic savedEpic = taskManager.getEpicById(epicId);
@@ -44,8 +42,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createSubtask() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         final int subtaskId = subtask1.getId();
@@ -59,7 +57,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getTaskMap() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task = new Task(1, "task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
         taskManager.createTask(task);
         final Map<Integer, Task> savedDataTask = taskManager.getTaskMap();
         Task savedTask = savedDataTask.get(1);
@@ -70,7 +68,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getEpicMap() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
         taskManager.createEpic(epic);
         final Map<Integer, Epic> savedDataEpic = taskManager.getEpicMap();
         Epic savedEpic = savedDataEpic.get(1);
@@ -81,8 +79,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getSubtaskMap() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
 
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
@@ -96,7 +94,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeTask() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task = new Task(1, "task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
         taskManager.createTask(task);
         taskManager.removeTask();
         final Map<Integer, Task> savedDataTask = taskManager.getTaskMap();
@@ -106,8 +104,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeEpic() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
 
         epic.setId(1);
         subtask1.setId(2);
@@ -124,7 +122,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void removeSubtask() {
         Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.removeSubtask();
@@ -138,9 +136,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void calculateStatEpicShouldReturnNEWForNullSubtask() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
-        Subtask subtask2 = (new Subtask(3,"New Subtask", "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
+        Subtask subtask2 = new Subtask(3,"New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1);
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
@@ -152,9 +150,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void calculateStatEpicShouldReturnNEWForAllSubtaskStatusNew() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
-        Subtask subtask2 = (new Subtask(3,"New Subtask", "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
+        Subtask subtask2 = new Subtask(3,"New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1);
 
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
@@ -165,17 +163,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void calculateStatEpicShouldReturnDONEForAllSubtaskStatusDone() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
-        Subtask subtask2 = (new Subtask(3,"New Subtask", "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
+        Subtask subtask2 = new Subtask(3,"New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1);
 
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask(2, "Test addNewSubtask", StatusTasks.DONE,
+        Subtask subtask3 = new Subtask(2,"Test addNewSubtask", StatusTasks.DONE,
                 "Test addNewSubtask description", 15L, LocalDateTime.now().plusMinutes(40), 1);
-        Subtask subtask4 = new Subtask(3, "Test addNewSubtask", StatusTasks.DONE,
+        Subtask subtask4 = new Subtask( 3,"Test addNewSubtask", StatusTasks.DONE,
                 "Test addNewSubtask description", 15L, LocalDateTime.now().plusMinutes(60),1);
 
         taskManager.updateSubtask(subtask3);
@@ -188,9 +186,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     // Должен быть статус NEW?
     @Test
     void calculateStatEpicShouldReturnNEWForStatSubtasksStatusNEWandDONE() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
-        Subtask subtask2 = (new Subtask(3,"New Subtask", "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
+        Subtask subtask2 = (new Subtask(3,"New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
 
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
@@ -206,17 +204,17 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void calculateStatEpicShouldReturnIN_PROGRESSForAllSubtaskStatusIN_PROGRESS() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
-        Subtask subtask2 = (new Subtask(3,"New Subtask", "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
+        Subtask subtask2 = (new Subtask(3,"New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now().plusMinutes(30), 1));
 
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask(2, "Test addNewSubtask", StatusTasks.IN_PROGRESS,
+        Subtask subtask3 = new Subtask(2,"Test addNewSubtask", StatusTasks.IN_PROGRESS,
                 "Test addNewSubtask description", 15L, LocalDateTime.now().plusMinutes(40), 1);
-        Subtask subtask4 = new Subtask(3, "Test addNewSubtask", StatusTasks.IN_PROGRESS,
+        Subtask subtask4 = new Subtask(3,"Test addNewSubtask", StatusTasks.IN_PROGRESS,
                 "Test addNewSubtask description", 15L, LocalDateTime.now().plusMinutes(60),1);
 
         taskManager.updateSubtask(subtask3);
@@ -227,7 +225,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getTaskByIdShouldReturnNullPointerExceptionForUnexpectedIdForId2() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task = new Task(1, "task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
         taskManager.createTask(task);
         try {
             taskManager.getTaskById(2);
@@ -239,7 +237,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getSubtaskByIdShouldReturnNullPointerExceptionForUnexpectedIdForId3() {
         Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         try {
@@ -263,8 +261,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getSubtaskByIdEpicShouldReturnNullPointerExceptionForUnexpectedIdEpic2() {
-        Epic epic = new Epic(1, "new Epic1", "Новый Эпик");
-        Subtask subtask1 = (new Subtask(2,"New Subtask", "Подзадача", 10L, LocalDateTime.now(), 1));
+        Epic epic = new Epic(1,"new Epic1", "Новый Эпик");
+        Subtask subtask1 = new Subtask(2, "New Subtask", StatusTasks.NEW, "Подзадача", 10L, LocalDateTime.now(), 1);
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         epic.setId(2);
@@ -277,8 +275,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void CheckCrossTimeShouldReturnFalseForCrossed() {
-        Task task = new Task(1,"task1", "Купить автомобиль", 10L, LocalDateTime.now());
-        Task task2 = new Task(2,"task1", "Купить автомобиль", 10L, LocalDateTime.now().plusMinutes(1));
+        Task task = new Task(1, "task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now());
+        Task task2 = new Task(2,"task1", StatusTasks.NEW, "Купить автомобиль", 10L, LocalDateTime.now().plusMinutes(1));
         taskManager.createTask(task);
         boolean check = taskManager.checkCrossTIme(task2);
 

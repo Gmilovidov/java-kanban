@@ -18,7 +18,6 @@ public class CSVFormatter {
      * @param value формат id,type,name,status,description,duration,startTime,epic
      */
     public static Task fromString(String value) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
         int idEpic = -1;
         String[] tokens = value.split(",");
         int id = Integer.parseInt(tokens[0]);
@@ -27,14 +26,18 @@ public class CSVFormatter {
         StatusTasks status = StatusTasks.valueOf(tokens[3]);
         String desc = tokens[4];
         Long duration = Long.parseLong(tokens[5]);
-        LocalDateTime startTime = LocalDateTime.parse(tokens[6], formatter);
+        LocalDateTime startTime = LocalDateTime.parse(tokens[6]);
         if (tokens.length == 8) {
             idEpic = Integer.parseInt(tokens[7]);
         }
 
         return switch (type) {
             case TASK -> new Task(id, name, status, desc, duration, startTime);
+
+
             case EPIC -> new Epic(id, name, status, desc, duration, startTime);
+
+
             case SUBTASK -> new Subtask(id, name, status, desc, duration, startTime, idEpic);
         };
     }
